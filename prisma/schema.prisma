@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client-js"
+  // output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int   @id @default(autoincrement())
+  email     String   @unique
+  name      String?
+  phoneNumber String?
+  password  String
+  role      Role     @default(PATIENT)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+
+  appointmentsAsPatient Appointment[] @relation("PatientAppointments")
+  appointmentsAsDoctor  Appointment[] @relation("DoctorAppointments")
+
+  establishment Establishment? @relation(fields: [establishmentId], references: [id])
+  establishmentId Int?
+
+  speciality  Speciality?
+}
+
+
+model Appointment {
+  id          Int   @id @default(autoincrement())
+  date        DateTime
+  time        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  status      Status   @default(PENDING)
+
+  patient     User     @relation("PatientAppointments", fields: [patientId], references: [id])
+  patientId   Int
+
+  doctor      User     @relation("DoctorAppointments", fields: [doctorId], references: [id])
+  doctorId    Int
+}
+
+model Establishment {
+  id        Int   @id @default(autoincrement())
+  name      String
+  address   String
+  phoneNumber String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  doctors   User[]
+}
+
+enum Status {
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
+
+enum Role {
+  PATIENT
+  DOCTOR
+  ADMIN
+}
+
+enum Speciality {
+  GENERALISTE
+  DERMATOLOGUE
+  PEDIATRE
+  GYNECOLOGUE
+  CARDIOLOGUE
+  OPHTALMOLOGUE
+  AUTRE
+}

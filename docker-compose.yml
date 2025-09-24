@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:15
+    container_name: doctolib-db
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: passer123
+      POSTGRES_DB: doctolib
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  backend:
+    build: .
+    container_name: doctolib-backend
+    restart: always
+    environment:
+      DATABASE_URL: "postgresql://admin:passer123@db:5432/doctolib?schema=public"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    volumes:
+      - .:/app
+    command: sh -c "npm install && npm run dev"
+
+volumes:
+  pgdata:
