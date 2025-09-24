@@ -28,7 +28,7 @@ async function main() {
       phoneNumber: "0678123456",
       password: await bcrypt.hash("passer", 10),
       role: "DOCTOR",
-      specialty: "GENERALISTE",
+      speciality: "GENERALISTE",
       establishmentId: est1.id
     }
   });
@@ -40,7 +40,7 @@ async function main() {
       phoneNumber: "0687456321",
       password: await bcrypt.hash("passer", 10),
       role: "DOCTOR",
-      specialty: "DERMATOLOGUE",
+      speciality: "DERMATOLOGUE",
       establishmentId: est2.id
     }
   });
