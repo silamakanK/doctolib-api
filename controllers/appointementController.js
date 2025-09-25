@@ -14,16 +14,26 @@ const getAllAppointements = async (req, res) => {
 const getAppointementByPatientId = async (req, res) => {
     const { id } = req.params;
     try {
-        const appointment = await prisma.appointment.findMany({
-            where: { patientId: parseInt(id) }
+        const appointments = await prisma.appointment.findMany({
+            where: { patientId: parseInt(id) },
+            orderBy: { date: 'asc' },
+            include: {
+                patient: {
+                    select: { id: true, name: true, email: true, phoneNumber: true }
+                },
+                doctor: {
+                    select: { id: true, name: true, speciality: true }
+                }
+            }   
         });
-        if (appointment) {
-            res.json(appointment);
+        if (appointments.length > 0) {
+            res.json(appointments);
         } else {
-            res.status(404).json({ error: "Rendez-vous non trouvé" });
+            res.status(404).json({ error: "Aucun rendez-vous trouvé" });
         }
     } catch (error) {
-        res.status(500).json({ error: "Échec de la récupération du rendez-vous" });
+        console.error("Erreur getAppointementByPatientId:", error);
+        res.status(500).json({ error: "Échec de la récupération des rendez-vous" });
     }
 };
 

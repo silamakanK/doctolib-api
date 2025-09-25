@@ -11,7 +11,7 @@ const getAllUsers = async (req, res) => {
     console.error("Erreur prisma /users:", error);
     res.status(500).json({ error: "Impossible de récupérer les users !" });
   }
-};  
+};
 
 const getUserById = async (req, res) => {
   const { id } = req.params;
