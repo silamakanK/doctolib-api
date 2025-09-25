@@ -1,5 +1,5 @@
 import express from 'express';
-import homeRoutes from './routes/home.js';
+// import homeRoutes from './routes/home.js';
 import userRoutes from './routes/userRoutes.js';
 import loginRoute from './routes/loginRoute.js'; 
 import appointementRoute from './routes/appointementRoute.js';
@@ -10,15 +10,15 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-try {
-  app.use('/', homeRoutes);
-  app.use('/users', userRoutes);
-  app.use('/login', loginRoute);
-  app.use('/appointements', appointementRoute);
+app.get('/', (req, res) => {
+  res.json({ message: 'Welcome to the Doctolib API'});
+}); 
 
-  app.listen(port, () => {
+// app.use('/', homeRoutes);
+app.use('/users', userRoutes);
+app.use('/login', loginRoute);
+app.use('/appointements', appointementRoute);
+
+app.listen(port, () => {
   console.log(`Doctolib API listening on port ${port}`);
-});
-} catch (error) {
-  console.error('Error setting up routes:', error);
-}
+} );
