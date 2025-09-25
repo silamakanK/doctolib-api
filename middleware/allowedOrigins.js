@@ -1,6 +1,5 @@
 const allowedOrigins = [
-  'http://localhost:3000',
-  'http://example.com',
+  'https://hackathon-doctolib.vercel.app',
 ];
 
 export default allowedOrigins;

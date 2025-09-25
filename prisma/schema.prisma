@@ -12,15 +12,21 @@ model User {
   name                  String?
   createdAt             DateTime       @default(now())
   updatedAt             DateTime       @updatedAt
-  establishmentId       Int?
   password              String
   phoneNumber           String?
   id                    Int            @id @default(autoincrement())
   role                  Role           @default(PATIENT)
-  speciality            Speciality?
+
+  specialityId          Int?
+  speciality            Speciality?    @relation(fields: [specialityId], references: [id])
+
   appointmentsAsDoctor  Appointment[]  @relation("DoctorAppointments")
   appointmentsAsPatient Appointment[]  @relation("PatientAppointments")
+
   establishment         Establishment? @relation(fields: [establishmentId], references: [id])
+  establishmentId       Int?
+
+  searchHistories       SearchHistory[]
 }
 
 model Appointment {
@@ -44,6 +50,37 @@ model Establishment {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   doctors     User[]
+  specialities Speciality[] @relation("EstablishmentSpecialities")
+
+  @@map("establishment")
+}
+
+model Speciality {
+  id        Int     @id @default(autoincrement())
+  name      String
+  users     User[]
+  establishments  Establishment[] @relation("EstablishmentSpecialities")
+
+  @@map("speciality")
+}
+
+model SearchHistory{
+  id        Int      @id @default(autoincrement())
+  query     String
+  createdAt DateTime @default(now())
+  patientId Int
+  patient   User     @relation(fields: [patientId], references: [id])
+}
+
+model DoctorFeed {
+  id      Int      @id @default(autoincrement())
+  title   String
+  content String
+  image   String?  // URL ou chemin vers l'image
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("doctorfeed")
 }
 
 enum Status {
@@ -56,14 +93,4 @@ enum Role {
   PATIENT
   DOCTOR
   ADMIN
-}
-
-enum Speciality {
-  GENERALISTE
-  DERMATOLOGUE
-  PEDIATRE
-  GYNECOLOGUE
-  CARDIOLOGUE
-  OPHTALMOLOGUE
-  AUTRE
 }

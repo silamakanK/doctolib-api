@@ -17,10 +17,6 @@ app.use('/users', userRoutes);
 app.use('/login', loginRoute);
 app.use('/appointements', appointementRoute);
 
-app.get('/test', (req, res) => {
-  res.json({DATABASE_URL: process.env.DATABASE_URL})
-})
-
 app.listen(port, () => {
   console.log(`Doctolib API listening on port ${port}`);
 } );
