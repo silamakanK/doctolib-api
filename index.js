@@ -10,13 +10,15 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/', homeRoutes);
-app.use('/users', userRoutes);
-app.use('/login', loginRoute);
-app.use('/appointements', appointementRoute);
+try {
+  app.use('/', homeRoutes);
+  app.use('/users', userRoutes);
+  app.use('/login', loginRoute);
+  app.use('/appointements', appointementRoute);
 
-
-
-app.listen(port, () => {
-  console.log(`Doctolib API listening at http://localhost:${port}`);
+  app.listen(port, () => {
+  console.log(`Doctolib API listening on port ${port}`);
 });
+} catch (error) {
+  console.error('Error setting up routes:', error);
+}
