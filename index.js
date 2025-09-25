@@ -17,6 +17,6 @@ app.use('/users', userRoutes);
 app.use('/login', loginRoute);
 app.use('/appointements', appointementRoute);
 
-app.listen(port, "O.O.O.O",() => {
+app.listen(port, () => {
   console.log(`Doctolib API listening on port ${port}`);
 } );
